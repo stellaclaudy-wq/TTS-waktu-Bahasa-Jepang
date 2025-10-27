@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTS 日本語 - 時間と習慣</title>
+<style>
+  body {
+    font-family: "Noto Sans JP", sans-serif;
+    background-color: #eef3ff;
+    text-align: center;
+    padding: 20px;
+  }
+  h1 {
+    color: #2b4fa0;
+  }
+  #crossword {
+    display: grid;
+    grid-template-columns: repeat(12, 40px);
+    justify-content: center;
+    gap: 1px;
+    margin: 20px auto;
+  }
+  .cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #aaa;
+    font-size: 20px;
+    text-align: center;
+    position: relative;
+    background: white;
+  }
+  .black {
+    background: #222;
+  }
+  .number {
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    font-size: 10px;
+    color: #2b4fa0;
+  }
+  .question-box {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: left;
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  button {
+    background: #2b4fa0;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #1e3572;
+  }
+</style>
+</head>
+<body>
+
+<h1>🧩 日本語クロスワード — 時間と習慣（TTS Bahasa Jepang）</h1>
+<p>Isilah kotak dengan <b>ひらがな</b> sesuai petunjuk mendatar（よこ）dan menurun（たて）！</p>
+
+<div id="crossword"></div>
+
+<div class="question-box">
+  <h3>🟦 Mendatar（よこ）</h3>
+  <ol>
+    <li>（1）私は＿＿＿コーヒーをのみます。<br><i>Aku selalu minum kopi.</i></li>
+    <li>（3）＿＿＿テストがあります。<br><i>Besok ada ujian.</i></li>
+    <li>（5）＿＿＿べんきょうします。<br><i>Aku belajar setiap hari.</i></li>
+    <li>（7）＿＿＿ジョギングをします。<br><i>Aku jogging setiap pagi.</i></li>
+    <li>（9）＿＿＿10時にねます。<br><i>Aku tidur setiap malam jam 10.</i></li>
+    <li>（11）＿＿＿ともだちとえいがをみます。<br><i>Minggu depan aku nonton film.</i></li>
+    <li>（13）＿＿＿かぞくとあそびました。<br><i>Minggu lalu aku bermain.</i></li>
+    <li>（15）＿＿＿にほんごをべんきょうしはじめました。<br><i>Baru-baru ini mulai belajar Jepang.</i></li>
+    <li>（17）＿＿＿ほんをよみます。<br><i>Kadang aku membaca buku.</i></li>
+    <li>（19）＿＿＿にほんへいきます。<br><i>Tahun depan aku pergi ke Jepang.</i></li>
+  </ol>
+
+  <h3>🟥 Menurun（たて）</h3>
+  <ol>
+    <li>（2）＿＿＿びょういんへいきました。<br><i>Kemarin pergi ke rumah sakit.</i></li>
+    <li>（4）＿＿＿ごはんをたべました。<br><i>Sekarang aku makan nasi.</i></li>
+    <li>（6）＿＿＿7時におきます。<br><i>Bangun pukul 7 pagi.</i></li>
+    <li>（8）＿＿＿3時にかえります。<br><i>Pulang pukul 3 sore.</i></li>
+    <li>（10）ごはんをたべて、＿＿＿しゅくだいをします。<br><i>Makan, lalu kerjakan PR.</i></li>
+    <li>（12）＿＿＿つきにいっかいおかねをはらいます。<br><i>Setiap bulan membayar sekali.</i></li>
+    <li>（14）＿＿＿かいものにいきます。<br><i>Setiap minggu berbelanja.</i></li>
+    <li>（16）にほんごを＿＿＿おぼえます。<br><i>Belajar sedikit demi sedikit.</i></li>
+    <li>（18）＿＿＿にほんへいきたいです。<br><i>Suatu hari ingin ke Jepang.</i></li>
+    <li>（20）＿＿＿におよぎにいきました。<br><i>Pergi berenang saat liburan musim panas.</i></li>
+  </ol>
+</div>
+
+<button onclick="checkAnswers()">Periksa Jawaban</button>
+<p id="result"></p>
+
+<script>
+const size = 12;
+const crossword = document.getElementById('crossword');
+
+// Buat grid kosong
+for (let i = 0; i < size * size; i++) {
+  const div = document.createElement('div');
+  div.classList.add('cell');
+  crossword.appendChild(div);
+}
+
+// Definisi kata
+const words = [
+  {num:1, dir:'across', row:0, col:0, word:'いつも'},
+  {num:2, dir:'across', row:1, col:2, word:'あした'},
+  {num:3, dir:'across', row:2, col:0, word:'まいにち'},
+  {num:4, dir:'across', row:3, col:1, word:'まいあさ'},
+  {num:5, dir:'across', row:4, col:2, word:'まいばん'},
+  {num:6, dir:'across', row:5, col:0, word:'らいしゅう'},
+  {num:7, dir:'across', row:6, col:1, word:'せんしゅう'},
+  {num:8, dir:'across', row:7, col:3, word:'さいきん'},
+  {num:9, dir:'across', row:8, col:0, word:'ときどき'},
+  {num:10, dir:'across', row:9, col:2, word:'らいねん'},
+  {num:11, dir:'down', row:0, col:5, word:'きのう'},
+  {num:12, dir:'down', row:1, col:1, word:'いま'},
+  {num:13, dir:'down', row:0, col:9, word:'ごぜん'},
+  {num:14, dir:'down', row:2, col:10, word:'ごご'},
+  {num:15, dir:'down', row:3, col:7, word:'あとで'},
+  {num:16, dir:'down', row:0, col:3, word:'まいつき'},
+  {num:17, dir:'down', row:0, col:7, word:'まいしゅう'},
+  {num:18, dir:'down', row:0, col:11, word:'すこしずつ'},
+  {num:19, dir:'down', row:1, col:4, word:'いつか'},
+  {num:20, dir:'down', row:2, col:0, word:'なつやすみ'},
+];
+
+const cells = document.querySelectorAll('.cell');
+function getIndex(r,c){return r*size+c;}
+
+// Hitamkan semua dulu
+cells.forEach(c => {
+  c.classList.add('black');
+  c.innerHTML = "";
+});
+
+// Isi huruf putih
+words.forEach(({num, dir, row, col, word})=>{
+  for(let i=0;i<word.length;i++){
+    const r = dir==='across'? row : row+i;
+    const c = dir==='across'? col+i : col;
+    const idx = getIndex(r,c);
+    const cell = cells[idx];
+    cell.classList.remove('black');
+    if(!cell.dataset.solution) cell.dataset.solution = word[i];
+  }
+  // Nomor di kotak pertama
+  const idxStart = getIndex(row,col);
+  const span = document.createElement('span');
+  span.classList.add('number');
+  span.textContent = num;
+  cells[idxStart].appendChild(span);
+});
+
+// Klik untuk isi huruf
+cells.forEach(c=>{
+  if(!c.classList.contains('black')){
+    const input = document.createElement('input');
+    input.maxLength=1;
+    input.style.border='none';
+    input.style.width='100%';
+    input.style.height='100%';
+    input.style.textAlign='center';
+    input.style.fontSize='20px';
+    input.style.background='transparent';
+    input.style.outline='none';
+    c.appendChild(input);
+  }
+});
+
+function checkAnswers(){
+  let correct=0, filled=0;
+  cells.forEach(c=>{
+    if(!c.classList.contains('black')){
+      const inp = c.querySelector('input');
+      if(inp.value){
+        filled++;
+        if(inp.value===c.dataset.solution) correct++;
+      }
+    }
+  });
+  const percent = Math.round((correct/filled)*100);
+  document.getElementById('result').innerText = Benar ${correct} dari ${filled} huruf (${percent}%)!;
+}
+</script>
+
+</body>
+</html>
